@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Integrations/SEGPayload.h
+../../../../../Pod/Classes/Integrations/SWPPayload.h

@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Integrations/SEGIntegration.h
+../../../../../Pod/Classes/Integrations/SWPIntegration.h

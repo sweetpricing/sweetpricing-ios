@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Internal/SEGSegmentIntegrationFactory.h
+../../../../../Pod/Classes/Internal/SWPSegmentIntegrationFactory.h

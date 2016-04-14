@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Internal/SEGBluetooth.h
+../../../../../Pod/Classes/Internal/SWPBluetooth.h

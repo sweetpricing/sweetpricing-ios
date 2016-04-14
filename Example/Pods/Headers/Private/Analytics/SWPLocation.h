@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Internal/SEGLocation.h
+../../../../../Pod/Classes/Internal/SWPLocation.h

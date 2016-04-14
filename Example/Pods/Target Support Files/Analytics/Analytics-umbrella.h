@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
 
-#import "SWPAliasPayload.h"
 #import "SWPGroupPayload.h"
 #import "SWPIdentifyPayload.h"
 #import "SWPIntegration.h"
@@ -19,3 +18,4 @@
 
 FOUNDATION_EXPORT double AnalyticsVersionNumber;
 FOUNDATION_EXPORT const unsigned char AnalyticsVersionString[];
+

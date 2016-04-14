@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Integrations/SEGGroupPayload.h
+../../../../../Pod/Classes/Integrations/SWPGroupPayload.h

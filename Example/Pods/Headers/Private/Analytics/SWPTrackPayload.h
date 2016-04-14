@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Integrations/SEGTrackPayload.h
+../../../../../Pod/Classes/Integrations/SWPTrackPayload.h

@@ -22,7 +22,6 @@
     [[SWPAnalytics sharedAnalytics] group:@"segment"];
     [[SWPAnalytics sharedAnalytics] screen:@"home"];
     [[SWPAnalytics sharedAnalytics] identify:@"prateek"];
-    [[SWPAnalytics sharedAnalytics] alias:@"f2prateek"];
     [[SWPAnalytics sharedAnalytics] flush];
 
     // Override point for customization after application launch.

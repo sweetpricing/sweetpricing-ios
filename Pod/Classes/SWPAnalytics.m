@@ -286,25 +286,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.d
                                   sync:false];
 }
 
-#pragma mark - Alias
-
-- (void)alias:(NSString *)newId
-{
-    [self alias:newId options:nil];
-}
-
-- (void)alias:(NSString *)newId options:(NSDictionary *)options
-{
-    SWPAliasPayload *payload = [[SWPAliasPayload alloc] initWithNewId:newId
-                                                              context:SWPCoerceDictionary([options objectForKey:@"context"])
-                                                         integrations:[options objectForKey:@"integrations"]];
-
-    [self callIntegrationsWithSelector:NSSelectorFromString(@"alias:")
-                             arguments:@[ payload ]
-                               options:options
-                                  sync:false];
-}
-
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo
 {
     [self callIntegrationsWithSelector:_cmd arguments:@[ userInfo ] options:nil sync:true];

@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Integrations/SEGScreenPayload.h
+../../../../../Pod/Classes/Integrations/SWPScreenPayload.h

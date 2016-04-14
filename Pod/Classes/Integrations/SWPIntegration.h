@@ -2,7 +2,6 @@
 #import "SWPIdentifyPayload.h"
 #import "SWPTrackPayload.h"
 #import "SWPScreenPayload.h"
-#import "SWPAliasPayload.h"
 #import "SWPIdentifyPayload.h"
 #import "SWPGroupPayload.h"
 
@@ -36,12 +35,6 @@
 // 3. [[SWPAnalytics sharedInstance] group:someGroupId traits:someGroupTraits options:someOptions];
 // @see https://segment.com/docs/spec/group/
 - (void)group:(SWPGroupPayload *)payload;
-
-// Alias will be called when the user calls either of the following:
-// 1. [[SWPAnalytics sharedInstance] alias:someNewId];
-// 2. [[SWPAnalytics sharedInstance] alias:someNewId options:someOptions];
-// @see https://segment.com/docs/spec/alias/
-- (void)alias:(SWPAliasPayload *)payload;
 
 // Reset is invoked when the user logs out, and any data saved about the user should be cleared.
 - (void)reset;
