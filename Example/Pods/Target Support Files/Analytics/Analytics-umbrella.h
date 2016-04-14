@@ -1,22 +1,21 @@
 #import <UIKit/UIKit.h>
 
-#import "SEGAliasPayload.h"
-#import "SEGGroupPayload.h"
-#import "SEGIdentifyPayload.h"
-#import "SEGIntegration.h"
-#import "SEGIntegrationFactory.h"
-#import "SEGPayload.h"
-#import "SEGScreenPayload.h"
-#import "SEGTrackPayload.h"
-#import "SEGAnalyticsRequest.h"
-#import "SEGAnalyticsUtils.h"
-#import "SEGBluetooth.h"
-#import "SEGLocation.h"
-#import "SEGReachability.h"
-#import "SEGSegmentIntegration.h"
-#import "SEGSegmentIntegrationFactory.h"
-#import "SEGAnalytics.h"
+#import "SWPAliasPayload.h"
+#import "SWPGroupPayload.h"
+#import "SWPIdentifyPayload.h"
+#import "SWPIntegration.h"
+#import "SWPIntegrationFactory.h"
+#import "SWPPayload.h"
+#import "SWPScreenPayload.h"
+#import "SWPTrackPayload.h"
+#import "SWPAnalyticsRequest.h"
+#import "SWPAnalyticsUtils.h"
+#import "SWPBluetooth.h"
+#import "SWPLocation.h"
+#import "SWPReachability.h"
+#import "SWPSegmentIntegration.h"
+#import "SWPSegmentIntegrationFactory.h"
+#import "SWPAnalytics.h"
 
 FOUNDATION_EXPORT double AnalyticsVersionNumber;
 FOUNDATION_EXPORT const unsigned char AnalyticsVersionString[];
-

@@ -1,5 +1,5 @@
 //
-//  main.m
+//  SWPAppDelegate.h
 //  Analytics
 //
 //  Created by Prateek Srivastava on 11/02/2015.
@@ -8,12 +8,10 @@
 //
 
 @import UIKit;
-#import "SWPAppDelegate.h"
 
-int main(int argc, char *argv[])
-{
-    @autoreleasepool
-    {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([SWPAppDelegate class]));
-    }
-}
+
+@interface SWPAppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
+
+@end

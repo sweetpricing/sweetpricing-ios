@@ -4,22 +4,23 @@
 //
 //  Created by Prateek Srivastava on 11/02/2015.
 //  Copyright (c) 2015 Prateek Srivastava. All rights reserved.
+//  Modified work Copyright (c) 2016 Sweet Pricing Ltd.
 //
 
 // https://github.com/Specta/Specta
-#import <Analytics/SEGAnalytics.h>
+#import <Analytics/SWPAnalytics.h>
 #import <Specta/Specta.h>
 #import <Foundation/Foundation.h>
 
 SpecBegin(Analytics);
 
 describe(@"analytics", ^{
-    __block SEGAnalytics *analytics = nil;
-    
+    __block SWPAnalytics *analytics = nil;
+
     beforeEach(^{
-        SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
-        [SEGAnalytics setupWithConfiguration:configuration];
-        analytics = [SEGAnalytics sharedAnalytics];
+        SWPAnalyticsConfiguration *configuration = [SWPAnalyticsConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
+        [SWPAnalytics setupWithConfiguration:configuration];
+        analytics = [SWPAnalytics sharedAnalytics];
     });
 
     it(@"initialized correctly", ^{
