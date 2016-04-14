@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "SWPIdentifyPayload.h"
 #import "SWPTrackPayload.h"
-#import "SWPScreenPayload.h"
 #import "SWPIdentifyPayload.h"
 
 @protocol SWPIntegration <NSObject>
@@ -20,13 +19,6 @@
 // 3. [[SWPAnalytics sharedInstance] track:someEvent properties:someProperties options:someOptions];
 // @see https://segment.com/docs/spec/track/
 - (void)track:(SWPTrackPayload *)payload;
-
-// Screen will be called when the user calls either of the following:
-// 1. [[SWPAnalytics sharedInstance] screen:someEvent];
-// 2. [[SWPAnalytics sharedInstance] screen:someEvent properties:someProperties];
-// 3. [[SWPAnalytics sharedInstance] screen:someEvent properties:someProperties options:someOptions];
-// @see https://segment.com/docs/spec/screen/
-- (void)screen:(SWPScreenPayload *)payload;
 
 // Reset is invoked when the user logs out, and any data saved about the user should be cleared.
 - (void)reset;

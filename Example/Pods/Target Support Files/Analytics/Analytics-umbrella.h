@@ -4,7 +4,6 @@
 #import "SWPIntegration.h"
 #import "SWPIntegrationFactory.h"
 #import "SWPPayload.h"
-#import "SWPScreenPayload.h"
 #import "SWPTrackPayload.h"
 #import "SWPAnalyticsRequest.h"
 #import "SWPAnalyticsUtils.h"

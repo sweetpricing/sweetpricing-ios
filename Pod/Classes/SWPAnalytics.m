@@ -234,33 +234,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.d
                                   sync:false];
 }
 
-#pragma mark - Screen
-
-- (void)screen:(NSString *)screenTitle
-{
-    [self screen:screenTitle properties:nil options:nil];
-}
-
-- (void)screen:(NSString *)screenTitle properties:(NSDictionary *)properties
-{
-    [self screen:screenTitle properties:properties options:nil];
-}
-
-- (void)screen:(NSString *)screenTitle properties:(NSDictionary *)properties options:(NSDictionary *)options
-{
-    NSCParameterAssert(screenTitle.length > 0);
-
-    SWPScreenPayload *payload = [[SWPScreenPayload alloc] initWithName:screenTitle
-                                                            properties:SWPCoerceDictionary(properties)
-                                                               context:SWPCoerceDictionary([options objectForKey:@"context"])
-                                                          integrations:[options objectForKey:@"integrations"]];
-
-    [self callIntegrationsWithSelector:NSSelectorFromString(@"screen:")
-                             arguments:@[ payload ]
-                               options:options
-                                  sync:false];
-}
-
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo
 {
     [self callIntegrationsWithSelector:_cmd arguments:@[ userInfo ] options:nil sync:true];

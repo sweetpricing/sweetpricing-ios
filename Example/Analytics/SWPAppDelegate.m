@@ -19,7 +19,6 @@
     [SWPAnalytics debug:YES];
 
     [[SWPAnalytics sharedAnalytics] track:@"Hello World"];
-    [[SWPAnalytics sharedAnalytics] screen:@"home"];
     [[SWPAnalytics sharedAnalytics] identify:@"prateek"];
     [[SWPAnalytics sharedAnalytics] flush];
 

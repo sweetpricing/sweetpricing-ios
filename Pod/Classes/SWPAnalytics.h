@@ -131,26 +131,6 @@ extern NSString *SWPAnalyticsIntegrationDidStart;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties options:(NSDictionary *)options;
 
-/*!
- @method
-
- @abstract
- Record the screens or views your users see.
-
- @param screenTitle   The title of the screen being viewed. We recommend using human-readable names
- like 'Photo Feed' or 'Completed Purchase Screen'.
-
- @param properties    A dictionary of properties for the screen view event. If the event was 'Added to Shopping Cart',
- it might have properties like price, productType, etc.
-
- @discussion
- When a user views a screen in your app, you'll want to record that here. For some tools like Google Analytics and Flurry, screen views are treated specially, and are different from "events" kind of like "page views" on the web. For services that don't treat "screen views" specially, we map "screen" straight to "track" with the same parameters. For example, Mixpanel doesn't treat "screen views" any differently. So a call to "screen" will be tracked as a normal event in Mixpanel, but get sent to Google Analytics and Flurry as a "screen".
-
- */
-- (void)screen:(NSString *)screenTitle;
-- (void)screen:(NSString *)screenTitle properties:(NSDictionary *)properties;
-- (void)screen:(NSString *)screenTitle properties:(NSDictionary *)properties options:(NSDictionary *)options;
-
 // todo: docs
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo;
 - (void)failedToRegisterForRemoteNotificationsWithError:(NSError *)error;
