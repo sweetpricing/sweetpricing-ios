@@ -48,7 +48,7 @@
 
     if (self = [super init]) {
         self.geocoder = [[CLGeocoder alloc] init];
-        self.syncQueue = dispatch_queue_create("io.segment.location.syncQueue", NULL);
+        self.syncQueue = dispatch_queue_create("com.sweetpricing.location.syncQueue", NULL);
         dispatch_async(dispatch_get_main_queue(), ^{
             self.locationManager = [[CLLocationManager alloc] init];
             self.locationManager.delegate = self;

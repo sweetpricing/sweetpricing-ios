@@ -1,13 +1,13 @@
-#import "SWPSegmentIntegrationFactory.h"
-#import "SWPSegmentIntegration.h"
+#import "SWPSweetpricingIntegrationFactory.h"
+#import "SWPSweetpricingIntegration.h"
 
 
-@implementation SWPSegmentIntegrationFactory
+@implementation SWPSweetpricingIntegrationFactory
 
 + (id)instance
 {
     static dispatch_once_t once;
-    static SWPSegmentIntegrationFactory *sharedInstance;
+    static SWPSweetpricingIntegrationFactory *sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
     });
@@ -22,12 +22,12 @@
 
 - (id<SWPIntegration>)createWithSettings:(NSDictionary *)settings forAnalytics:(SWPAnalytics *)analytics
 {
-    return [[SWPSegmentIntegration alloc] initWithAnalytics:analytics];
+    return [[SWPSweetpricingIntegration alloc] initWithAnalytics:analytics];
 }
 
 - (NSString *)key
 {
-    return @"Segment.io";
+    return @"Sweetpricing";
 }
 
 @end

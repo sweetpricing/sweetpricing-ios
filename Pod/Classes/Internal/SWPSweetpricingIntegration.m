@@ -1,4 +1,4 @@
-// SegmentioIntegration.h
+// SweetpricingioIntegration.h
 // Copyright (c) 2014 Segment.io. All rights reserved.
 // Modified work Copyright (c) 2016 Sweet Pricing Ltd.
 
@@ -10,15 +10,15 @@
 #import "SWPAnalytics.h"
 #import "SWPAnalyticsUtils.h"
 #import "SWPAnalyticsRequest.h"
-#import "SWPSegmentIntegration.h"
+#import "SWPSweetpricingIntegration.h"
 #import "SWPBluetooth.h"
 #import "SWPReachability.h"
 #import "SWPLocation.h"
 #import <iAd/iAd.h>
 
-NSString *const SWPSegmentDidSendRequestNotification = @"SegmentDidSendRequest";
-NSString *const SWPSegmentRequestDidSucceedNotification = @"SegmentRequestDidSucceed";
-NSString *const SWPSegmentRequestDidFailNotification = @"SegmentRequestDidFail";
+NSString *const SWPSweetpricingDidSendRequestNotification = @"SweetpricingDidSendRequest";
+NSString *const SWPSweetpricingRequestDidSucceedNotification = @"SweetpricingRequestDidSucceed";
+NSString *const SWPSweetpricingRequestDidFailNotification = @"SweetpricingRequestDidFail";
 
 NSString *const SWPAdvertisingClassIdentifier = @"ASIdentifierManager";
 NSString *const SWPADClientClass = @"ADClient";
@@ -58,7 +58,7 @@ static BOOL GetAdTrackingEnabled()
 }
 
 
-@interface SWPSegmentIntegration ()
+@interface SWPSweetpricingIntegration ()
 
 @property (nonatomic, strong) NSMutableArray *queue;
 @property (nonatomic, strong) NSDictionary *context;
@@ -77,13 +77,13 @@ static BOOL GetAdTrackingEnabled()
 @end
 
 
-@implementation SWPSegmentIntegration
+@implementation SWPSweetpricingIntegration
 
 - (id)initWithAnalytics:(SWPAnalytics *)analytics
 {
     if (self = [super init]) {
         self.configuration = [analytics configuration];
-        self.apiURL = [NSURL URLWithString:@"https://api.segment.io/v1/import"];
+        self.apiURL = [NSURL URLWithString:@"https://api.sweetpricing.com/v1/events"];
         self.anonymousId = [self getAnonymousId:NO];
         self.userId = [self getUserId];
         self.bluetooth = [[SWPBluetooth alloc] init];
@@ -91,7 +91,7 @@ static BOOL GetAdTrackingEnabled()
         [self.reachability startNotifier];
         self.context = [self staticContext];
         self.flushTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(flush) userInfo:nil repeats:YES];
-        self.serialQueue = seg_dispatch_queue_create_specific("io.segment.analytics.segmentio", DISPATCH_QUEUE_SERIAL);
+        self.serialQueue = seg_dispatch_queue_create_specific("com.sweetpricing.dynamicpricing.sweetpricing", DISPATCH_QUEUE_SERIAL);
         self.flushTaskID = UIBackgroundTaskInvalid;
         self.analytics = analytics;
     }
@@ -298,7 +298,7 @@ static BOOL GetAdTrackingEnabled()
 
 - (void)track:(SWPTrackPayload *)payload
 {
-    SWPLog(@"segment integration received payload %@", payload);
+    SWPLog(@"sweetpricing integration received payload %@", payload);
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [dictionary setValue:payload.event forKey:@"event"];
@@ -476,12 +476,12 @@ static BOOL GetAdTrackingEnabled()
                                                      [self dispatchBackground:^{
                                                          if (self.request.error) {
                                                              SWPLog(@"%@ API request had an error: %@", self, self.request.error);
-                                                             [self notifyForName:SWPSegmentRequestDidFailNotification userInfo:self.batch];
+                                                             [self notifyForName:SWPSweetpricingRequestDidFailNotification userInfo:self.batch];
                                                          } else {
                                                              SWPLog(@"%@ API request success 200", self);
                                                              [self.queue removeObjectsInArray:self.batch];
                                                              [self persistQueue];
-                                                             [self notifyForName:SWPSegmentRequestDidSucceedNotification userInfo:self.batch];
+                                                             [self notifyForName:SWPSweetpricingRequestDidSucceedNotification userInfo:self.batch];
                                                          }
 
                                                          self.batch = nil;
@@ -489,7 +489,7 @@ static BOOL GetAdTrackingEnabled()
                                                          [self endBackgroundTask];
                                                      }];
                                                  }];
-    [self notifyForName:SWPSegmentDidSendRequestNotification userInfo:self.batch];
+    [self notifyForName:SWPSweetpricingDidSendRequestNotification userInfo:self.batch];
 }
 
 - (void)applicationDidEnterBackground
@@ -534,22 +534,22 @@ static BOOL GetAdTrackingEnabled()
 
 - (NSURL *)userIDURL
 {
-    return SWPAnalyticsURLForFilename(@"segmentio.userId");
+    return SWPAnalyticsURLForFilename(@"sweetpricing.userId");
 }
 
 - (NSURL *)anonymousIDURL
 {
-    return SWPAnalyticsURLForFilename(@"segment.anonymousId");
+    return SWPAnalyticsURLForFilename(@"sweetpricing.anonymousId");
 }
 
 - (NSURL *)queueURL
 {
-    return SWPAnalyticsURLForFilename(@"segmentio.queue.plist");
+    return SWPAnalyticsURLForFilename(@"sweetpricing.queue.plist");
 }
 
 - (NSURL *)traitsURL
 {
-    return SWPAnalyticsURLForFilename(@"segmentio.traits.plist");
+    return SWPAnalyticsURLForFilename(@"sweetpricing.traits.plist");
 }
 
 - (void)persistQueue

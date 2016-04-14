@@ -26,7 +26,7 @@ const NSString *SWPCentralManagerClass = @"CBCentralManager";
 - (id)init
 {
     if (self = [super init]) {
-        _queue = dispatch_queue_create("io.segment.bluetooth.queue", NULL);
+        _queue = dispatch_queue_create("com.sweetpricing.bluetooth.queue", NULL);
         _manager = [[CBCentralManager alloc] initWithDelegate:self
                                                         queue:_queue
                                                       options:@{ CBCentralManagerOptionShowPowerAlertKey : @NO }];

@@ -10,8 +10,8 @@
 #import "SWPBluetooth.h"
 #import "SWPLocation.h"
 #import "SWPReachability.h"
-#import "SWPSegmentIntegration.h"
-#import "SWPSegmentIntegrationFactory.h"
+#import "SWPSweetpricingIntegration.h"
+#import "SWPSweetpricingIntegrationFactory.h"
 #import "SWPAnalytics.h"
 
 FOUNDATION_EXPORT double AnalyticsVersionNumber;

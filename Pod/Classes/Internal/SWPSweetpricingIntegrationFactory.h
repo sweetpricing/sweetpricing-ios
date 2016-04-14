@@ -2,7 +2,7 @@
 #import "SWPIntegrationFactory.h"
 
 
-@interface SWPSegmentIntegrationFactory : NSObject <SWPIntegrationFactory>
+@interface SWPSweetpricingIntegrationFactory : NSObject <SWPIntegrationFactory>
 
 + (id)instance;
 

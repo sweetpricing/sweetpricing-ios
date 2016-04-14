@@ -10,10 +10,10 @@
 #import "SWPIntegrationFactory.h"
 #import "SWPIntegration.h"
 #import <objc/runtime.h>
-#import "SWPSegmentIntegrationFactory.h"
+#import "SWPSweetpricingIntegrationFactory.h"
 
 static SWPAnalytics *__sharedInstance = nil;
-NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.did.start";
+NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.integration.did.start";
 
 
 @interface SWPAnalyticsConfiguration ()
@@ -46,7 +46,7 @@ NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.d
         self.enableAdvertisingTracking = YES;
         self.flushAt = 20;
         _factories = [NSMutableArray array];
-        [_factories addObject:[SWPSegmentIntegrationFactory instance]];
+        [_factories addObject:[SWPSweetpricingIntegrationFactory instance]];
     }
     return self;
 }
@@ -99,7 +99,7 @@ NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.d
     if (self = [self init]) {
         self.configuration = configuration;
         self.enabled = YES;
-        self.serialQueue = seg_dispatch_queue_create_specific("io.segment.analytics", DISPATCH_QUEUE_SERIAL);
+        self.serialQueue = seg_dispatch_queue_create_specific("com.sweetpricing.dynamicpricing", DISPATCH_QUEUE_SERIAL);
         self.messageQueue = [[NSMutableArray alloc] init];
         self.factories = [configuration.factories copy];
         self.integrations = [NSMutableDictionary dictionaryWithCapacity:self.factories.count];
@@ -371,7 +371,7 @@ NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.d
 
 - (BOOL)isIntegration:(NSString *)key enabledInOptions:(NSDictionary *)options
 {
-    if ([@"Segment.io" isEqualToString:key]) {
+    if ([@"Sweetpricing" isEqualToString:key]) {
         return YES;
     }
     if (options[key]) {
