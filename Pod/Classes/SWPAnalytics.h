@@ -1,11 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "SWPIntegrationFactory.h"
 
-/**
- * NSNotification name, that is posted after integrations are loaded.
- */
-extern NSString *SWPAnalyticsIntegrationDidStart;
-
 @protocol SWPIntegrationFactory;
 
 /**
@@ -199,17 +194,5 @@ extern NSString *SWPAnalyticsIntegrationDidStart;
 
 /** Returns the configuration used to create the analytics client. */
 - (SWPAnalyticsConfiguration *)configuration;
-
-@end
-
-
-@interface SWPAnalytics (Deprecated)
-
-+ (void)initializeWithWriteKey:(NSString *)writeKey __attribute__((deprecated("Use +setupWithConfiguration: instead")));
-- (instancetype)initWithWriteKey:(NSString *)writeKey __attribute__((deprecated("Use -initWithConfiguration: instead")));
-- (void)registerPushDeviceToken:(NSData *)deviceToken __attribute__((deprecated("Use -registerForRemoteNotificationsWithDeviceToken: instead")));
-- (void)registerForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken __attribute__((deprecated("Use -registeredForRemoteNotificationsWithDeviceToken: instead")));
-- (void)registerForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken options:(NSDictionary *)options __attribute__((deprecated("Use -registeredForRemoteNotificationsWithDeviceToken: instead")));
-
 
 @end

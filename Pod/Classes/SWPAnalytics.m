@@ -13,7 +13,6 @@
 #import "SWPSweetpricingIntegrationFactory.h"
 
 static SWPAnalytics *__sharedInstance = nil;
-NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.integration.did.start";
 
 
 @interface SWPAnalyticsConfiguration ()
@@ -66,11 +65,9 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
 
 @interface SWPAnalytics ()
 
-@property (nonatomic, strong) NSDictionary *cachedSettings;
 @property (nonatomic, strong) SWPAnalyticsConfiguration *configuration;
 @property (nonatomic, strong) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableArray *messageQueue;
-@property (nonatomic, strong) SWPAnalyticsRequest *settingsRequest;
 @property (nonatomic, assign) BOOL enabled;
 @property (nonatomic, strong) NSArray *factories;
 @property (nonatomic, strong) NSMutableDictionary *integrations;
@@ -81,8 +78,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
 
 
 @implementation SWPAnalytics
-
-@synthesize cachedSettings = _cachedSettings;
 
 + (void)setupWithConfiguration:(SWPAnalyticsConfiguration *)configuration
 {
@@ -106,14 +101,17 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
         self.registeredIntegrations = [NSMutableDictionary dictionaryWithCapacity:self.factories.count];
         self.configuration = configuration;
 
-        // Update settings on each integration immediately
-        [self refreshSettings];
+        for (id<SWPIntegrationFactory> factory in self.factories) {
+            NSString *key = [factory key];
+            id<SWPIntegration> integration = [factory createWithSettings:nil forAnalytics:self];
+            if (integration != nil) {
+                self.integrations[key] = integration;
+                self.registeredIntegrations[key] = @NO;
+            }
+        }
 
         // Attach to application state change hooks
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-
-        // Update settings on foreground
-        [nc addObserver:self selector:@selector(onAppForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
         // Pass through for application state change events
         for (NSString *name in @[ UIApplicationDidEnterBackgroundNotification,
@@ -136,12 +134,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
 
 
 #pragma mark - NSNotificationCenter Callback
-
-
-- (void)onAppForeground:(NSNotification *)note
-{
-    [self refreshSettings];
-}
 
 - (void)handleAppStateNotification:(NSNotification *)note
 {
@@ -276,79 +268,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
     _enabled = NO;
 }
 
-#pragma mark - Analytics Settings
-
-- (NSDictionary *)cachedSettings
-{
-    if (!_cachedSettings)
-        _cachedSettings = [[NSDictionary alloc] initWithContentsOfURL:[self settingsURL]] ?: @{};
-    return _cachedSettings;
-}
-
-- (void)setCachedSettings:(NSDictionary *)settings
-{
-    _cachedSettings = [settings copy];
-    NSURL *settingsURL = [self settingsURL];
-    if (!_cachedSettings) {
-        // [@{} writeToURL:settingsURL atomically:YES];
-        return;
-    }
-    [_cachedSettings writeToURL:settingsURL atomically:YES];
-
-    static dispatch_once_t once;
-    dispatch_once(&once, ^{
-        [self updateIntegrationsWithSettings:settings[@"integrations"]];
-    });
-}
-
-- (void)updateIntegrationsWithSettings:(NSDictionary *)projectSettings
-{
-    for (id<SWPIntegrationFactory> factory in self.factories) {
-        NSString *key = [factory key];
-        NSDictionary *integrationSettings = [projectSettings objectForKey:key];
-        if (integrationSettings) {
-            id<SWPIntegration> integration = [factory createWithSettings:integrationSettings forAnalytics:self];
-            if (integration != nil) {
-                self.integrations[key] = integration;
-                self.registeredIntegrations[key] = @NO;
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:SWPAnalyticsIntegrationDidStart object:key userInfo:nil];
-        } else {
-            SWPLog(@"No settings for %@. Skipping.", key);
-        }
-    }
-
-    seg_dispatch_specific_async(_serialQueue, ^{
-        [self flushMessageQueue];
-        self.initialized = true;
-    });
-}
-
-- (void)refreshSettings
-{
-    if (_settingsRequest)
-        return;
-
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://cdn.segment.com/v1/projects/%@/settings", self.configuration.writeKey]]];
-    [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    [urlRequest setHTTPMethod:@"GET"];
-
-    SWPLog(@"%@ Sending API settings request: %@", self, urlRequest);
-
-    _settingsRequest = [SWPAnalyticsRequest startWithURLRequest:urlRequest
-                                                     completion:^{
-                                                         seg_dispatch_specific_async(_serialQueue, ^{
-                                                             SWPLog(@"%@ Received API settings response: %@", self, _settingsRequest.responseJSON);
-
-                                                             if (_settingsRequest.error == nil) {
-                                                                 [self setCachedSettings:_settingsRequest.responseJSON];
-                                                             }
-
-                                                             _settingsRequest = nil;
-                                                         });
-                                                     }];
-}
-
 #pragma mark - Class Methods
 
 + (instancetype)sharedAnalytics
@@ -384,19 +303,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
     return YES;
 }
 
-- (BOOL)isTrackEvent:(NSString *)event enabledForIntegration:(NSString *)key inPlan:(NSDictionary *)plan
-{
-    if (plan[@"track"][event]) {
-        if ([plan[@"track"][event][@"enabled"] boolValue]) {
-            return [self isIntegration:key enabledInOptions:plan[@"track"][event][@"integrations"]];
-        } else {
-            return NO;
-        }
-    }
-
-    return YES;
-}
-
 - (void)forwardSelector:(SEL)selector arguments:(NSArray *)arguments options:(NSDictionary *)options
 {
     if (!_enabled)
@@ -425,13 +331,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
     }
 
     NSString *eventType = NSStringFromSelector(selector);
-    if ([eventType hasPrefix:@"track:"]) {
-        BOOL enabled = [self isTrackEvent:arguments[0] enabledForIntegration:key inPlan:self.cachedSettings[@"plan"]];
-        if (!enabled) {
-            SWPLog(@"Not sending call to %@ because it is disabled in plan.", key);
-            return;
-        }
-    }
 
     SWPLog(@"Running: %@ with arguments %@ on integration: %@", eventType, arguments, key);
     NSInvocation *invocation = [self invocationForSelector:selector arguments:arguments];
@@ -471,64 +370,20 @@ NSString *SWPAnalyticsIntegrationDidStart = @"com.sweetpricing.dynamicpricing.in
 
 - (void)callIntegrationsWithSelector:(SEL)selector arguments:(NSArray *)arguments options:(NSDictionary *)options sync:(BOOL)sync
 {
-    if (sync && self.initialized) {
+    if (sync) {
         [self forwardSelector:selector arguments:arguments options:options];
         return;
     }
 
     seg_dispatch_specific_async(_serialQueue, ^{
-        if (self.initialized) {
-            [self flushMessageQueue];
-            [self forwardSelector:selector arguments:arguments options:options];
-        } else {
-            [self queueSelector:selector arguments:arguments options:options];
-        }
+        [self flushMessageQueue];
+        [self forwardSelector:selector arguments:arguments options:options];
     });
-}
-
-- (NSURL *)settingsURL
-{
-    return SWPAnalyticsURLForFilename(@"analytics.settings.v2.plist");
 }
 
 - (NSDictionary *)bundledIntegrations
 {
     return [self.registeredIntegrations copy];
 }
-
-@end
-
-
-@implementation SWPAnalytics (Deprecated)
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-
-+ (void)initializeWithWriteKey:(NSString *)writeKey
-{
-    [self setupWithConfiguration:[SWPAnalyticsConfiguration configurationWithWriteKey:writeKey]];
-}
-
-- (instancetype)initWithWriteKey:(NSString *)writeKey
-{
-    return [self initWithConfiguration:[SWPAnalyticsConfiguration configurationWithWriteKey:writeKey]];
-}
-
-- (void)registerPushDeviceToken:(NSData *)deviceToken
-{
-    [self registeredForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-
-- (void)registerForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    [self registeredForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-
-- (void)registerForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken options:(NSDictionary *)options
-{
-    [self registeredForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-
-#pragma clang diagnostic pop
 
 @end
