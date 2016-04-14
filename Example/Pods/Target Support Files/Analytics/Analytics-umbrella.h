@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
 
-#import "SWPGroupPayload.h"
 #import "SWPIdentifyPayload.h"
 #import "SWPIntegration.h"
 #import "SWPIntegrationFactory.h"

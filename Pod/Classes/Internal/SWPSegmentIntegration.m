@@ -315,15 +315,6 @@ static BOOL GetAdTrackingEnabled()
     [self enqueueAction:@"screen" dictionary:dictionary context:payload.context integrations:payload.integrations];
 }
 
-- (void)group:(SWPGroupPayload *)payload
-{
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    [dictionary setValue:payload.groupId forKey:@"groupId"];
-    [dictionary setValue:payload.traits forKey:@"traits"];
-
-    [self enqueueAction:@"group" dictionary:dictionary context:payload.context integrations:payload.integrations];
-}
-
 - (void)registerForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken options:(NSDictionary *)options
 {
     NSCParameterAssert(deviceToken != nil);

@@ -261,31 +261,6 @@ NSString *SWPAnalyticsIntegrationDidStart = @"io.segment.analytics.integration.d
                                   sync:false];
 }
 
-#pragma mark - Group
-
-- (void)group:(NSString *)groupId
-{
-    [self group:groupId traits:nil options:nil];
-}
-
-- (void)group:(NSString *)groupId traits:(NSDictionary *)traits
-{
-    [self group:groupId traits:traits options:nil];
-}
-
-- (void)group:(NSString *)groupId traits:(NSDictionary *)traits options:(NSDictionary *)options
-{
-    SWPGroupPayload *payload = [[SWPGroupPayload alloc] initWithGroupId:groupId
-                                                                 traits:SWPCoerceDictionary(traits)
-                                                                context:SWPCoerceDictionary([options objectForKey:@"context"])
-                                                           integrations:[options objectForKey:@"integrations"]];
-
-    [self callIntegrationsWithSelector:NSSelectorFromString(@"group:")
-                             arguments:@[ payload ]
-                               options:options
-                                  sync:false];
-}
-
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo
 {
     [self callIntegrationsWithSelector:_cmd arguments:@[ userInfo ] options:nil sync:true];

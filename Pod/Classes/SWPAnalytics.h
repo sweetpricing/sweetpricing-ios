@@ -151,23 +151,6 @@ extern NSString *SWPAnalyticsIntegrationDidStart;
 - (void)screen:(NSString *)screenTitle properties:(NSDictionary *)properties;
 - (void)screen:(NSString *)screenTitle properties:(NSDictionary *)properties options:(NSDictionary *)options;
 
-/*!
- @method
-
- @abstract
- Associate a user with a group, organization, company, project, or w/e *you* call them.
-
- @param groupId       A database ID for this group.
- @param traits        A dictionary of traits you know about the group. Things like: name, employees, etc.
-
- @discussion
- When you learn more about who the group is, you can record that information with group.
-
- */
-- (void)group:(NSString *)groupId;
-- (void)group:(NSString *)groupId traits:(NSDictionary *)traits;
-- (void)group:(NSString *)groupId traits:(NSDictionary *)traits options:(NSDictionary *)options;
-
 // todo: docs
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo;
 - (void)failedToRegisterForRemoteNotificationsWithError:(NSError *)error;

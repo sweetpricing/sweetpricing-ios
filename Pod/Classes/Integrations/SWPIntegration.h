@@ -3,7 +3,6 @@
 #import "SWPTrackPayload.h"
 #import "SWPScreenPayload.h"
 #import "SWPIdentifyPayload.h"
-#import "SWPGroupPayload.h"
 
 @protocol SWPIntegration <NSObject>
 
@@ -28,13 +27,6 @@
 // 3. [[SWPAnalytics sharedInstance] screen:someEvent properties:someProperties options:someOptions];
 // @see https://segment.com/docs/spec/screen/
 - (void)screen:(SWPScreenPayload *)payload;
-
-// Group will be called when the user calls either of the following:
-// 1. [[SWPAnalytics sharedInstance] group:someGroupId];
-// 2. [[SWPAnalytics sharedInstance] group:someGroupId traits:];
-// 3. [[SWPAnalytics sharedInstance] group:someGroupId traits:someGroupTraits options:someOptions];
-// @see https://segment.com/docs/spec/group/
-- (void)group:(SWPGroupPayload *)payload;
 
 // Reset is invoked when the user logs out, and any data saved about the user should be cleared.
 - (void)reset;
