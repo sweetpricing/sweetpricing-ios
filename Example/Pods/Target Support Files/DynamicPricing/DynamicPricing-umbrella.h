@@ -12,7 +12,7 @@
 #import "SWPReachability.h"
 #import "SWPSweetpricingIntegration.h"
 #import "SWPSweetpricingIntegrationFactory.h"
-#import "SWPAnalytics.h"
+#import "SWPDynamicPricing.h"
 
 FOUNDATION_EXPORT double DynamicPricingVersionNumber;
 FOUNDATION_EXPORT const unsigned char DynamicPricingVersionString[];

@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import "SWPAnalytics.h"
+#import "SWPDynamicPricing.h"
 #import "SWPAnalyticsUtils.h"
 #import "SWPAnalyticsRequest.h"
 #import "SWPSweetpricingIntegration.h"
@@ -71,15 +71,15 @@ static BOOL GetAdTrackingEnabled()
 @property (nonatomic, strong) NSTimer *flushTimer;
 @property (nonatomic, strong) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *traits;
-@property (nonatomic, assign) SWPAnalytics *analytics;
-@property (nonatomic, assign) SWPAnalyticsConfiguration *configuration;
+@property (nonatomic, assign) SWPDynamicPricing *analytics;
+@property (nonatomic, assign) SWPDynamicPricingConfiguration *configuration;
 
 @end
 
 
 @implementation SWPSweetpricingIntegration
 
-- (id)initWithAnalytics:(SWPAnalytics *)analytics
+- (id)initWithAnalytics:(SWPDynamicPricing *)analytics
 {
     if (self = [super init]) {
         self.configuration = [analytics configuration];
@@ -104,7 +104,7 @@ static BOOL GetAdTrackingEnabled()
 
     dict[@"library"] = @{
         @"name" : @"analytics-ios",
-        @"version" : [SWPAnalytics version]
+        @"version" : [SWPDynamicPricing version]
     };
 
     NSMutableDictionary *infoDictionary = [[[NSBundle mainBundle] infoDictionary] mutableCopy];

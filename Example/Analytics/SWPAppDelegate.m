@@ -8,19 +8,19 @@
 //
 
 #import "SWPAppDelegate.h"
-#import <DynamicPricing/SWPAnalytics.h>
+#import <DynamicPricing/SWPDynamicPricing.h>
 
 
 @implementation SWPAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [SWPAnalytics setupWithConfiguration:[SWPAnalyticsConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"]];
-    [SWPAnalytics debug:YES];
+    [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"]];
+    [SWPDynamicPricing debug:YES];
 
-    [[SWPAnalytics sharedAnalytics] track:@"Hello World"];
-    [[SWPAnalytics sharedAnalytics] identify:@"prateek"];
-    [[SWPAnalytics sharedAnalytics] flush];
+    [[SWPDynamicPricing sharedDynamicPricing] track:@"Hello World"];
+    [[SWPDynamicPricing sharedDynamicPricing] identify:@"prateek"];
+    [[SWPDynamicPricing sharedDynamicPricing] flush];
 
     // Override point for customization after application launch.
     return YES;

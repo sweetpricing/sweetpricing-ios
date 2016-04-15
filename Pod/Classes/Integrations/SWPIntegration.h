@@ -7,16 +7,16 @@
 
 @optional
 // Identify will be called when the user calls either of the following:
-// 1. [[SWPAnalytics sharedInstance] identify:someUserId];
-// 2. [[SWPAnalytics sharedInstance] identify:someUserId traits:someTraits];
-// 3. [[SWPAnalytics sharedInstance] identify:someUserId traits:someTraits options:someOptions];
+// 1. [[SWPDynamicPricing sharedInstance] identify:someUserId];
+// 2. [[SWPDynamicPricing sharedInstance] identify:someUserId traits:someTraits];
+// 3. [[SWPDynamicPricing sharedInstance] identify:someUserId traits:someTraits options:someOptions];
 // @see https://segment.com/docs/spec/identify/
 - (void)identify:(SWPIdentifyPayload *)payload;
 
 // Track will be called when the user calls either of the following:
-// 1. [[SWPAnalytics sharedInstance] track:someEvent];
-// 2. [[SWPAnalytics sharedInstance] track:someEvent properties:someProperties];
-// 3. [[SWPAnalytics sharedInstance] track:someEvent properties:someProperties options:someOptions];
+// 1. [[SWPDynamicPricing sharedInstance] track:someEvent];
+// 2. [[SWPDynamicPricing sharedInstance] track:someEvent properties:someProperties];
+// 3. [[SWPDynamicPricing sharedInstance] track:someEvent properties:someProperties options:someOptions];
 // @see https://segment.com/docs/spec/track/
 - (void)track:(SWPTrackPayload *)payload;
 

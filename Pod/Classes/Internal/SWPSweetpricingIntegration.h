@@ -16,6 +16,6 @@ extern NSString *const SWPSweetpricingRequestDidFailNotification;
 @property (nonatomic, copy) NSString *userId;
 @property (nonatomic, strong) NSURL *apiURL;
 
-- (id)initWithAnalytics:(SWPAnalytics *)analytics;
+- (id)initWithAnalytics:(SWPDynamicPricing *)analytics;
 
 @end

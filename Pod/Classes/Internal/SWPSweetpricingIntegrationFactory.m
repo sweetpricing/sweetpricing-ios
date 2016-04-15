@@ -20,7 +20,7 @@
     return self;
 }
 
-- (id<SWPIntegration>)createWithSettings:(NSDictionary *)settings forAnalytics:(SWPAnalytics *)analytics
+- (id<SWPIntegration>)createWithSettings:(NSDictionary *)settings forAnalytics:(SWPDynamicPricing *)analytics
 {
     return [[SWPSweetpricingIntegration alloc] initWithAnalytics:analytics];
 }

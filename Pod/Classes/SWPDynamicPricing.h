@@ -6,7 +6,7 @@
 /**
  * This object provides a set of properties to control various policies of the analytics client. Other than `writeKey`, these properties can be changed at any time.
  */
-@interface SWPAnalyticsConfiguration : NSObject
+@interface SWPDynamicPricingConfiguration : NSObject
 
 /**
  * Creates and returns a configuration with default settings and the given write key.
@@ -48,26 +48,26 @@
 /**
  * This object provides an API for recording analytics.
  */
-@interface SWPAnalytics : NSObject
+@interface SWPDynamicPricing : NSObject
 
 /**
  * Used by the analytics client to configure various options.
  */
-@property (nonatomic, strong, readonly) SWPAnalyticsConfiguration *configuration;
+@property (nonatomic, strong, readonly) SWPDynamicPricingConfiguration *configuration;
 
 /**
  * Setup this analytics client instance.
  *
  * @param configuration The configuration used to setup the client.
  */
-- (instancetype)initWithConfiguration:(SWPAnalyticsConfiguration *)configuration;
+- (instancetype)initWithConfiguration:(SWPDynamicPricingConfiguration *)configuration;
 
 /**
  * Setup the analytics client.
  *
  * @param configuration The configuration used to setup the client.
  */
-+ (void)setupWithConfiguration:(SWPAnalyticsConfiguration *)configuration;
++ (void)setupWithConfiguration:(SWPDynamicPricingConfiguration *)configuration;
 
 /**
  * Enabled/disables debug logging to trace your data going through the SDK.
@@ -81,7 +81,7 @@
  *
  * @see -setupWithConfiguration:
  */
-+ (instancetype)sharedAnalytics;
++ (instancetype)sharedDynamicPricing;
 
 /*!
  @method
@@ -193,6 +193,6 @@
 - (NSDictionary *)bundledIntegrations;
 
 /** Returns the configuration used to create the analytics client. */
-- (SWPAnalyticsConfiguration *)configuration;
+- (SWPDynamicPricingConfiguration *)configuration;
 
 @end

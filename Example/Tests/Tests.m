@@ -8,26 +8,26 @@
 //
 
 // https://github.com/Specta/Specta
-#import <DynamicPricing/SWPAnalytics.h>
+#import <DynamicPricing/SWPDynamicPricing.h>
 #import <Specta/Specta.h>
 #import <Foundation/Foundation.h>
 
 SpecBegin(Analytics);
 
 describe(@"analytics", ^{
-    __block SWPAnalytics *analytics = nil;
+    __block SWPDynamicPricing *dynamicPricing = nil;
 
     beforeEach(^{
-        SWPAnalyticsConfiguration *configuration = [SWPAnalyticsConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
-        [SWPAnalytics setupWithConfiguration:configuration];
-        analytics = [SWPAnalytics sharedAnalytics];
+        SWPDynamicPricingConfiguration *configuration = [SWPDynamicPricingConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
+        [SWPDynamicPricing setupWithConfiguration:configuration];
+        dynamicPricing = [SWPDynamicPricing sharedDynamicPricing];
     });
 
     it(@"initialized correctly", ^{
-        expect(analytics.configuration.flushAt).to.equal(20);
-        expect(analytics.configuration.writeKey).to.equal(@"MlTmISmburwl2nN9o3NFpGfElujcfb0q");
-        expect(analytics.configuration.shouldUseLocationServices).to.equal(@NO);
-        expect(analytics.configuration.enableAdvertisingTracking).to.equal(@YES);
+        expect(dynamicPricing.configuration.flushAt).to.equal(20);
+        expect(dynamicPricing.configuration.writeKey).to.equal(@"MlTmISmburwl2nN9o3NFpGfElujcfb0q");
+        expect(dynamicPricing.configuration.shouldUseLocationServices).to.equal(@NO);
+        expect(dynamicPricing.configuration.enableAdvertisingTracking).to.equal(@YES);
     });
 });
 

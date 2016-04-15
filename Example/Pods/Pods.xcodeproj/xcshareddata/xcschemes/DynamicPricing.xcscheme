@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'E7E6B7A057A3708E98A7AB94'
+               BlueprintIdentifier = '228AC4860DF774F4078EB961'
                BlueprintName = 'DynamicPricing'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'DynamicPricing.framework'>

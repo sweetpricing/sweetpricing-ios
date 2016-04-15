@@ -5,17 +5,17 @@
 #import <UIKit/UIKit.h>
 #import "SWPAnalyticsUtils.h"
 #import "SWPAnalyticsRequest.h"
-#import "SWPAnalytics.h"
+#import "SWPDynamicPricing.h"
 
 #import "SWPIntegrationFactory.h"
 #import "SWPIntegration.h"
 #import <objc/runtime.h>
 #import "SWPSweetpricingIntegrationFactory.h"
 
-static SWPAnalytics *__sharedInstance = nil;
+static SWPDynamicPricing *__sharedInstance = nil;
 
 
-@interface SWPAnalyticsConfiguration ()
+@interface SWPDynamicPricingConfiguration ()
 
 @property (nonatomic, copy, readwrite) NSString *writeKey;
 @property (nonatomic, strong, readonly) NSMutableArray *factories;
@@ -23,11 +23,11 @@ static SWPAnalytics *__sharedInstance = nil;
 @end
 
 
-@implementation SWPAnalyticsConfiguration
+@implementation SWPDynamicPricingConfiguration
 
 + (instancetype)configurationWithWriteKey:(NSString *)writeKey
 {
-    return [[SWPAnalyticsConfiguration alloc] initWithWriteKey:writeKey];
+    return [[SWPDynamicPricingConfiguration alloc] initWithWriteKey:writeKey];
 }
 
 - (instancetype)initWithWriteKey:(NSString *)writeKey
@@ -63,9 +63,9 @@ static SWPAnalytics *__sharedInstance = nil;
 @end
 
 
-@interface SWPAnalytics ()
+@interface SWPDynamicPricing ()
 
-@property (nonatomic, strong) SWPAnalyticsConfiguration *configuration;
+@property (nonatomic, strong) SWPDynamicPricingConfiguration *configuration;
 @property (nonatomic, strong) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableArray *messageQueue;
 @property (nonatomic, assign) BOOL enabled;
@@ -77,9 +77,9 @@ static SWPAnalytics *__sharedInstance = nil;
 @end
 
 
-@implementation SWPAnalytics
+@implementation SWPDynamicPricing
 
-+ (void)setupWithConfiguration:(SWPAnalyticsConfiguration *)configuration
++ (void)setupWithConfiguration:(SWPDynamicPricingConfiguration *)configuration
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -87,7 +87,7 @@ static SWPAnalytics *__sharedInstance = nil;
     });
 }
 
-- (instancetype)initWithConfiguration:(SWPAnalyticsConfiguration *)configuration
+- (instancetype)initWithConfiguration:(SWPDynamicPricingConfiguration *)configuration
 {
     NSCParameterAssert(configuration != nil);
 
@@ -270,7 +270,7 @@ static SWPAnalytics *__sharedInstance = nil;
 
 #pragma mark - Class Methods
 
-+ (instancetype)sharedAnalytics
++ (instancetype)sharedDynamicPricing
 {
     NSCParameterAssert(__sharedInstance != nil);
     return __sharedInstance;
