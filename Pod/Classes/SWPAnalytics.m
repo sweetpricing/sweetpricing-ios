@@ -283,7 +283,7 @@ static SWPAnalytics *__sharedInstance = nil;
 
 + (NSString *)version
 {
-    return @"3.0.7";
+    return @"0.0.1";
 }
 
 #pragma mark - Private

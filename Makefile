@@ -8,7 +8,7 @@ XC_ARGS := -scheme $(PROJECT)-Example -workspace Example/$(PROJECT).xcworkspace 
 bootstrap:
 	.buildscript/bootstrap.sh
 
-install: Example/Podfile Analytics.podspec
+install: Example/Podfile DynamicPricing.podspec
 	pod install --project-directory=Example
 
 clean:

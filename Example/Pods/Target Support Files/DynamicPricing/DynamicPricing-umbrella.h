@@ -14,6 +14,6 @@
 #import "SWPSweetpricingIntegrationFactory.h"
 #import "SWPAnalytics.h"
 
-FOUNDATION_EXPORT double AnalyticsVersionNumber;
-FOUNDATION_EXPORT const unsigned char AnalyticsVersionString[];
+FOUNDATION_EXPORT double DynamicPricingVersionNumber;
+FOUNDATION_EXPORT const unsigned char DynamicPricingVersionString[];
 

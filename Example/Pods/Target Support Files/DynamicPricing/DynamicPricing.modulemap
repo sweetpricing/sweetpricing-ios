@@ -1,0 +1,6 @@
+framework module DynamicPricing {
+  umbrella header "DynamicPricing-umbrella.h"
+
+  export *
+  module * { export * }
+}

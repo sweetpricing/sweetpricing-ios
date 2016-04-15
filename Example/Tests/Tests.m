@@ -8,7 +8,7 @@
 //
 
 // https://github.com/Specta/Specta
-#import <Analytics/SWPAnalytics.h>
+#import <DynamicPricing/SWPAnalytics.h>
 #import <Specta/Specta.h>
 #import <Foundation/Foundation.h>
 

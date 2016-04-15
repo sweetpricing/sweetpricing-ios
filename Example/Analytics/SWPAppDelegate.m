@@ -8,7 +8,7 @@
 //
 
 #import "SWPAppDelegate.h"
-#import <Analytics/SWPAnalytics.h>
+#import <DynamicPricing/SWPAnalytics.h>
 
 
 @implementation SWPAppDelegate
