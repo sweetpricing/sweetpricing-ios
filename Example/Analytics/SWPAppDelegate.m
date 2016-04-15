@@ -15,7 +15,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"]];
+    [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithAppKey:@"b099e94449d816c3c200f40b5b77c858"]];
     [SWPDynamicPricing debug:YES];
 
     [[SWPDynamicPricing sharedDynamicPricing] track:@"Hello World"];

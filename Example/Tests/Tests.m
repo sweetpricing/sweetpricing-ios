@@ -18,14 +18,14 @@ describe(@"analytics", ^{
     __block SWPDynamicPricing *dynamicPricing = nil;
 
     beforeEach(^{
-        SWPDynamicPricingConfiguration *configuration = [SWPDynamicPricingConfiguration configurationWithWriteKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
+        SWPDynamicPricingConfiguration *configuration = [SWPDynamicPricingConfiguration configurationWithAppKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
         [SWPDynamicPricing setupWithConfiguration:configuration];
         dynamicPricing = [SWPDynamicPricing sharedDynamicPricing];
     });
 
     it(@"initialized correctly", ^{
         expect(dynamicPricing.configuration.flushAt).to.equal(20);
-        expect(dynamicPricing.configuration.writeKey).to.equal(@"MlTmISmburwl2nN9o3NFpGfElujcfb0q");
+        expect(dynamicPricing.configuration.appKey).to.equal(@"MlTmISmburwl2nN9o3NFpGfElujcfb0q");
         expect(dynamicPricing.configuration.shouldUseLocationServices).to.equal(@NO);
         expect(dynamicPricing.configuration.enableAdvertisingTracking).to.equal(@YES);
     });

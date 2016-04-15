@@ -11,16 +11,16 @@
 /**
  * Creates and returns a configuration with default settings and the given write key.
  *
- * @param writeKey Your project's write key from segment.io.
+ * @param appKey Your project's write key from segment.io.
  */
-+ (instancetype)configurationWithWriteKey:(NSString *)writeKey;
++ (instancetype)configurationWithAppKey:(NSString *)appKey;
 
 /**
  * Your project's write key from segment.io.
  *
- * @see +configurationWithWriteKey:
+ * @see +configurationWithAppKey:
  */
-@property (nonatomic, copy, readonly) NSString *writeKey;
+@property (nonatomic, copy, readonly) NSString *appKey;
 
 /**
  * Whether the analytics client should use location services. If `YES` and the host app hasn't asked for permission to use location services then the user will be presented with an alert view asking to do so. `NO` by default.

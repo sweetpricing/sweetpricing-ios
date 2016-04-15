@@ -17,7 +17,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
 
 @interface SWPDynamicPricingConfiguration ()
 
-@property (nonatomic, copy, readwrite) NSString *writeKey;
+@property (nonatomic, copy, readwrite) NSString *appKey;
 @property (nonatomic, strong, readonly) NSMutableArray *factories;
 
 @end
@@ -25,15 +25,15 @@ static SWPDynamicPricing *__sharedInstance = nil;
 
 @implementation SWPDynamicPricingConfiguration
 
-+ (instancetype)configurationWithWriteKey:(NSString *)writeKey
++ (instancetype)configurationWithAppKey:(NSString *)appKey
 {
-    return [[SWPDynamicPricingConfiguration alloc] initWithWriteKey:writeKey];
+    return [[SWPDynamicPricingConfiguration alloc] initWithAppKey:appKey];
 }
 
-- (instancetype)initWithWriteKey:(NSString *)writeKey
+- (instancetype)initWithAppKey:(NSString *)appKey
 {
     if (self = [self init]) {
-        self.writeKey = writeKey;
+        self.appKey = appKey;
     }
     return self;
 }
@@ -57,7 +57,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%p:%@, %@>", self, self.class, [self dictionaryWithValuesForKeys:@[ @"writeKey", @"shouldUseLocationServices", @"flushAt" ]]];
+    return [NSString stringWithFormat:@"<%p:%@, %@>", self, self.class, [self dictionaryWithValuesForKeys:@[ @"appKey", @"shouldUseLocationServices", @"flushAt" ]]];
 }
 
 @end
