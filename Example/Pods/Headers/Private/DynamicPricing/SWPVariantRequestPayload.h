@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/Integrations/SWPVariantRequestPayload.h

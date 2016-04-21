@@ -25,7 +25,7 @@ describe(@"analytics", ^{
 
     it(@"initialized correctly", ^{
         expect(dynamicPricing.configuration.flushAt).to.equal(20);
-        expect(dynamicPricing.configuration.appKey).to.equal(@"MlTmISmburwl2nN9o3NFpGfElujcfb0q");
+        expect(dynamicPricing.configuration.appKey).to.equal(@"98b30d00aae1d61245698547b81d5692");
         expect(dynamicPricing.configuration.shouldUseLocationServices).to.equal(@NO);
         expect(dynamicPricing.configuration.enableAdvertisingTracking).to.equal(@YES);
     });

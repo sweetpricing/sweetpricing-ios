@@ -9,6 +9,7 @@
 
 #import "SWPIntegrationFactory.h"
 #import "SWPIntegration.h"
+#import "SWPVariant.h"
 #import <objc/runtime.h>
 #import "SWPSweetpricingIntegrationFactory.h"
 
@@ -224,6 +225,45 @@ static SWPDynamicPricing *__sharedInstance = nil;
                              arguments:@[ payload ]
                                options:options
                                   sync:false];
+}
+
+- (void)trackPurchase:(NSString *)productId
+{
+    NSDictionary *properties = @{
+      @"productId" : productId
+    };
+
+    [self track:@"Purchase" properties:properties options:nil];
+}
+
+- (void)trackViewVariant:(SWPVariant *)variant
+{
+    NSNumber *variantId = [variant id];
+
+    // if we are falling back on a default, then we have nothing to track.
+    if (variantId == nil) {
+      return;
+    }
+
+    NSDictionary *properties = @{
+      @"variantId" : [variant id]
+    };
+
+    [self track:@"View Variant" properties:properties options:nil];
+}
+
+
+- (void)fetchVariant:(NSInteger)productGroupId completion:(SWPIntegrationFetchVariantCompletionBlock) completion
+{
+  // we only use the first integration
+  id<SWPIntegration> spInteg = self.integrations[@"Sweetpricing"];
+
+  SWPVariantRequestPayload *payload = [[SWPVariantRequestPayload alloc] initWithProductGroupId:productGroupId
+                                                            properties:nil
+                                                            context:nil
+                                                            integrations:nil];
+
+  [spInteg fetchVariant:payload completion:completion];
 }
 
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo

@@ -2,6 +2,10 @@
 #import "SWPIdentifyPayload.h"
 #import "SWPTrackPayload.h"
 #import "SWPIdentifyPayload.h"
+#import "SWPVariantRequestPayload.h"
+#import "SWPVariant.h"
+
+typedef void (^SWPIntegrationFetchVariantCompletionBlock)(SWPVariant *, NSError *);
 
 @protocol SWPIntegration <NSObject>
 
@@ -19,6 +23,8 @@
 // 3. [[SWPDynamicPricing sharedInstance] track:someEvent properties:someProperties options:someOptions];
 // @see https://segment.com/docs/spec/track/
 - (void)track:(SWPTrackPayload *)payload;
+
+- (void)fetchVariant:(SWPVariantRequestPayload *)payload completion:(SWPIntegrationFetchVariantCompletionBlock) completion;
 
 // Reset is invoked when the user logs out, and any data saved about the user should be cleared.
 - (void)reset;

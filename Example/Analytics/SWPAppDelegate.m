@@ -15,12 +15,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithAppKey:@"b099e94449d816c3c200f40b5b77c858"]];
+    [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithAppKey:@"98b30d00aae1d61245698547b81d5692"]];
     [SWPDynamicPricing debug:YES];
 
-    [[SWPDynamicPricing sharedDynamicPricing] track:@"Hello World"];
-    [[SWPDynamicPricing sharedDynamicPricing] identify:@"prateek"];
-    [[SWPDynamicPricing sharedDynamicPricing] flush];
+    // We get an entire product group worth of App Store IAP IDs.
+    // These are the integer identifiers created by Sweet Pricing.
+    int productGroupId = 16;
+    int productId = 87;
+
+    // When we need to obtain the App Store product ID, send a request to
+    // fetchVariant to get pricing data for a particular product group.
+    [[SWPDynamicPricing sharedDynamicPricing] fetchVariant:productGroupId completion:^(SWPVariant *variant, NSError *error) {
+      // The error argument is nil if there is no error.
+      NSLog(@"Variant ID is %@", [variant id]);
+
+      // Even if there is an error, a \SWPVariant object is returned.
+      // If there was a problem getting pricing info, the method will fallback
+      // on a default product ID.
+      NSString *appStoreId = [variant skuForProductId:productId withDefault:@"com.sweetpricing.default.sku"];
+      NSLog(@"Product SKU is %@", appStoreId);
+
+      // When the user views this variant (typically when you load it),
+      // you need to track the view.
+      [[SWPDynamicPricing sharedDynamicPricing] trackViewVariant:variant];
+      [[SWPDynamicPricing sharedDynamicPricing] trackPurchase:appStoreId];
+    }];
 
     // Override point for customization after application launch.
     return YES;

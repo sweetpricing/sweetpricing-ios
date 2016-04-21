@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "SWPIntegrationFactory.h"
+#import "SWPVariant.h"
 
 @protocol SWPIntegrationFactory;
 
@@ -125,6 +126,10 @@
 - (void)track:(NSString *)event;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties options:(NSDictionary *)options;
+- (void)trackPurchase:(NSString *)productId;
+- (void)trackViewVariant:(SWPVariant *)variant;
+
+- (void)fetchVariant:(NSInteger)productGroupId completion:(SWPIntegrationFetchVariantCompletionBlock) completion;
 
 // todo: docs
 - (void)receivedRemoteNotification:(NSDictionary *)userInfo;

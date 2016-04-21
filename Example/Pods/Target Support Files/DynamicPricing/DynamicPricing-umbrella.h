@@ -5,6 +5,7 @@
 #import "SWPIntegrationFactory.h"
 #import "SWPPayload.h"
 #import "SWPTrackPayload.h"
+#import "SWPVariantRequestPayload.h"
 #import "SWPAnalyticsRequest.h"
 #import "SWPAnalyticsUtils.h"
 #import "SWPBluetooth.h"
@@ -12,6 +13,7 @@
 #import "SWPReachability.h"
 #import "SWPSweetpricingIntegration.h"
 #import "SWPSweetpricingIntegrationFactory.h"
+#import "SWPVariant.h"
 #import "SWPDynamicPricing.h"
 
 FOUNDATION_EXPORT double DynamicPricingVersionNumber;

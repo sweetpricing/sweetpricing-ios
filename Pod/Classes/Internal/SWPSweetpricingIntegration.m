@@ -14,6 +14,7 @@
 #import "SWPBluetooth.h"
 #import "SWPReachability.h"
 #import "SWPLocation.h"
+#import "SWPVariant.h"
 #import <iAd/iAd.h>
 
 NSString *const SWPSweetpricingDidSendRequestNotification = @"SweetpricingDidSendRequest";
@@ -84,6 +85,7 @@ static BOOL GetAdTrackingEnabled()
     if (self = [super init]) {
         self.configuration = [analytics configuration];
         self.apiURL = [NSURL URLWithString:@"https://api.sweetpricing.com/v1/events"];
+        self.variantRequestURL = [NSURL URLWithString:@"https://api.sweetpricing.com/v1/variant"];
         self.anonymousId = [self getAnonymousId:NO];
         self.userId = [self getUserId];
         self.bluetooth = [[SWPBluetooth alloc] init];
@@ -248,7 +250,7 @@ static BOOL GetAdTrackingEnabled()
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%p:%@, %@>", self, self.class, self.configuration.writeKey];
+    return [NSString stringWithFormat:@"<%p:%@, %@>", self, self.class, self.configuration.appKey];
 }
 
 - (void)saveUserId:(NSString *)userId
@@ -304,6 +306,64 @@ static BOOL GetAdTrackingEnabled()
     [dictionary setValue:payload.event forKey:@"event"];
     [dictionary setValue:payload.properties forKey:@"properties"];
     [self enqueueAction:@"track" dictionary:dictionary context:payload.context integrations:payload.integrations];
+}
+
+- (void)fetchVariant:(SWPVariantRequestPayload *)payload completion:(SWPIntegrationFetchVariantCompletionBlock) completion
+{
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+
+    [dictionary setValue:[NSNumber numberWithInteger:payload.productGroupId] forKey:@"productGroupId"];
+    dictionary[@"timestamp"] = iso8601FormattedString([NSDate date]);
+    dictionary[@"type"] = @"variantRequest";
+    dictionary[@"messageId"] = GenerateUUIDString();
+    [dictionary setObject:self.configuration.appKey forKey:@"appKey"];
+
+    [self dispatchBackground:^{
+      // attach userId and anonymousId inside the dispatch_async in case
+      // they've changed (see identify function)
+
+      [dictionary setValue:self.userId forKey:@"userId"];
+      [dictionary setValue:self.anonymousId forKey:@"anonymousId"];
+      [dictionary setValue:[self integrationsDictionary:payload.integrations] forKey:@"integrations"];
+
+      NSDictionary *defaultContext = [self liveContext];
+      NSDictionary *customContext = payload.context;
+      NSMutableDictionary *context = [NSMutableDictionary dictionaryWithCapacity:customContext.count + defaultContext.count];
+      [context addEntriesFromDictionary:defaultContext];
+      [context addEntriesFromDictionary:customContext]; // let the custom context override ours
+      [dictionary setValue:[context copy] forKey:@"context"];
+
+      NSData *body = nil;
+      __block NSError *error = nil;
+      SWPVariant *defaultVariant = [[SWPVariant alloc] initWithDictionary:[NSDictionary dictionary]];
+
+      body = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:&error];
+
+      if (error != nil) {
+        return completion(defaultVariant, error);
+      }
+
+      NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:self.variantRequestURL];
+      [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+      [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+      [urlRequest setHTTPMethod:@"POST"];
+      [urlRequest setHTTPBody:body];
+
+      SWPLog(@"%@ Sending fetch variant request.", self);
+
+      __block SWPAnalyticsRequest *variantRequest = [SWPAnalyticsRequest startWithURLRequest:urlRequest
+                                             completion:^{
+                                                 if (variantRequest.error != nil) {
+                                                   SWPLog(@"%@ SP Fetch Variant request has error: %@", self, self.request.error);
+                                                   error = variantRequest.error;
+                                                   completion(defaultVariant, error);
+                                                 } else {
+                                                   SWPLog(@"%@ SP Fetch Variant success!", self);
+                                                   SWPVariant *variant = [[SWPVariant alloc] initWithDictionary:variantRequest.responseJSON];
+                                                   completion(variant, error);
+                                                 }
+                                             }];
+    }];
 }
 
 - (void)registerForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken options:(NSDictionary *)options
@@ -400,7 +460,7 @@ static BOOL GetAdTrackingEnabled()
         SWPLog(@"%@ Flushing %lu of %lu queued API calls.", self, (unsigned long)self.batch.count, (unsigned long)self.queue.count);
 
         NSMutableDictionary *payloadDictionary = [[NSMutableDictionary alloc] init];
-        [payloadDictionary setObject:self.configuration.writeKey forKey:@"writeKey"];
+        [payloadDictionary setObject:self.configuration.appKey forKey:@"appKey"];
         [payloadDictionary setObject:iso8601FormattedString([NSDate date]) forKey:@"sentAt"];
         [payloadDictionary setObject:self.context forKey:@"context"];
         [payloadDictionary setObject:self.batch forKey:@"batch"];
