@@ -18,7 +18,7 @@ describe(@"analytics", ^{
     __block SWPDynamicPricing *dynamicPricing = nil;
 
     beforeEach(^{
-        SWPDynamicPricingConfiguration *configuration = [SWPDynamicPricingConfiguration configurationWithAppKey:@"MlTmISmburwl2nN9o3NFpGfElujcfb0q"];
+        SWPDynamicPricingConfiguration *configuration = [SWPDynamicPricingConfiguration configurationWithAppKey:@"98b30d00aae1d61245698547b81d5692"];
         [SWPDynamicPricing setupWithConfiguration:configuration];
         dynamicPricing = [SWPDynamicPricing sharedDynamicPricing];
     });

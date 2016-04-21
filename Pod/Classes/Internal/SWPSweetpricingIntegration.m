@@ -105,7 +105,7 @@ static BOOL GetAdTrackingEnabled()
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 
     dict[@"library"] = @{
-        @"name" : @"analytics-ios",
+        @"name" : @"sweetpricing-ios",
         @"version" : [SWPDynamicPricing version]
     };
 
