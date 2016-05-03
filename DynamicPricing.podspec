@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "DynamicPricing"
-  s.version          = "0.0.1"
+  s.version          = "1.0.0"
   s.summary          = "Client Library to connect to Sweet Pricing."
 
   s.description      = <<-DESC
