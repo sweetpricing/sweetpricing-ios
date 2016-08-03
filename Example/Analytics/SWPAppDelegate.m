@@ -18,27 +18,44 @@
     [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithAppKey:@"98b30d00aae1d61245698547b81d5692"]];
     [SWPDynamicPricing debug:YES];
 
-    // We get an entire product group worth of App Store IAP IDs.
-    // These are the integer identifiers created by Sweet Pricing.
-    int productGroupId = 16;
-    int productId = 87;
+    // Suppose we have an in-app store called 'Subscriptions' that has a
+    // Sweet Pricing ID of '3'. And this store contains two products,
+    // 1 Month (ID = 7) and 1 Year (ID = 8).
+    int spStoreId = 3;
+    int sp1MonthId = 7;
+    int sp1YearId = 8;
 
-    // When we need to obtain the App Store product ID, send a request to
-    // fetchVariant to get pricing data for a particular product group.
-    [[SWPDynamicPricing sharedDynamicPricing] fetchVariant:productGroupId completion:^(SWPVariant *variant, NSError *error) {
-      // The error argument is nil if there is no error.
-      NSLog(@"Variant ID is %@", [variant id]);
+    // (1) Use the fetchVariant method to ask Sweet Pricing for prices for
+    // this in-app store.
+    [[SWPDynamicPricing sharedDynamicPricing] fetchVariant:spStoreId completion:^(SWPVariant *variant, NSError *error) {
+      // (2) Read the product IDs that Sweet Pricing has provided. If there was
+      // an error (ie error is not nil), then fall back on hard-coded defaults.
+      NSString *apple1MonthId = [variant skuForProductId:sp1MonthId withDefault:@"com.sweetpricing.default.1month"];
+      NSString *apple1YearId = [variant skuForProductId:sp1YearId withDefault:@"com.sweetpricing.default.1year"];
 
-      // Even if there is an error, a \SWPVariant object is returned.
-      // If there was a problem getting pricing info, the method will fallback
-      // on a default product ID.
-      NSString *appStoreId = [variant skuForProductId:productId withDefault:@"com.sweetpricing.default.sku"];
-      NSLog(@"Product SKU is %@", appStoreId);
+      NSLog(@"1 Month Product ID is %@", apple1MonthId);
+      NSLog(@"1 Year Product ID is %@", apple1YearId);
 
-      // When the user views this variant (typically when you load it),
-      // you need to track the view.
-      [[SWPDynamicPricing sharedDynamicPricing] trackViewVariant:variant];
-      [[SWPDynamicPricing sharedDynamicPricing] trackPurchase:appStoreId];
+      // (3) Fetch the product information from Store Kit API. This will return
+      // an array of all the products that you requested. Turn that data into
+      // an array to be passed to trackViewStore.
+      NSArray *products = @[@{
+        @"price" : [NSDecimalNumber decimalNumberWithString:@"9.99"],
+        @"currencyCode" : [[NSLocale localeWithLocaleIdentifier:@"en_US"] objectForKey:NSLocaleCurrencyCode],
+        @"productId": apple1MonthId
+      }, @{
+        @"price" : [NSDecimalNumber decimalNumberWithString:@"29.99"],
+        @"currencyCode" : [[NSLocale localeWithLocaleIdentifier:@"en_US"] objectForKey:NSLocaleCurrencyCode],
+        @"productId": apple1YearId
+      }];
+
+      // (4) When the user views the store, track the event in Sweet Pricing.
+      [[SWPDynamicPricing sharedDynamicPricing] trackViewStore:variant products:products];
+
+      // (5) When the user makes a purchase, track the event using
+      // trackPurchase. Sweet Pricing will associate the purchase will the
+      // last price shown to the user (as tracked with trackViewStore).
+      [[SWPDynamicPricing sharedDynamicPricing] trackPurchase:apple1MonthId];
     }];
 
     // Override point for customization after application launch.

@@ -236,7 +236,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
     [self track:@"Purchase" properties:properties options:nil];
 }
 
-- (void)trackViewVariant:(SWPVariant *)variant
+- (void)trackViewStore:(SWPVariant *)variant products:(NSArray *)products
 {
     NSNumber *variantId = [variant id];
 
@@ -246,7 +246,8 @@ static SWPDynamicPricing *__sharedInstance = nil;
     }
 
     NSDictionary *properties = @{
-      @"variantId" : [variant id]
+      @"variantId" : [variant id],
+      @"products" : products
     };
 
     [self track:@"View Variant" properties:properties options:nil];
@@ -323,7 +324,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
 
 + (NSString *)version
 {
-    return @"1.0.0";
+    return @"1.1.0";
 }
 
 #pragma mark - Private

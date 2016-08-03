@@ -127,7 +127,7 @@
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties options:(NSDictionary *)options;
 - (void)trackPurchase:(NSString *)productId;
-- (void)trackViewVariant:(SWPVariant *)variant;
+- (void)trackViewStore:(SWPVariant *)variant products:(NSArray *)products;
 
 - (void)fetchVariant:(NSInteger)productGroupId completion:(SWPIntegrationFetchVariantCompletionBlock) completion;
 
