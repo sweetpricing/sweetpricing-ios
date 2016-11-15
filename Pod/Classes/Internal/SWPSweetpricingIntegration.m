@@ -544,7 +544,6 @@ static BOOL GetAdTrackingEnabled()
                                                              [self notifyForName:SWPSweetpricingRequestDidSucceedNotification userInfo:self.batch];
                                                          }
 
-                                                         self.batch = nil;
                                                          self.request = nil;
                                                          [self endBackgroundTask];
                                                      }];
