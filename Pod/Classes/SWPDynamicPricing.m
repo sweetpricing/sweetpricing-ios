@@ -239,16 +239,20 @@ static SWPDynamicPricing *__sharedInstance = nil;
 - (void)trackViewStore:(SWPVariant *)variant products:(NSArray *)products
 {
     NSNumber *variantId = [variant id];
+    NSDictionary *properties;
 
     // if we are falling back on a default, then we have nothing to track.
     if (variantId == nil) {
-      return;
+      properties = @{
+        @"variantId" : @0,
+        @"products" : products
+      };
+    } else {
+      properties = @{
+        @"variantId" : [variant id],
+        @"products" : products
+      };
     }
-
-    NSDictionary *properties = @{
-      @"variantId" : [variant id],
-      @"products" : products
-    };
 
     [self track:@"View Variant" properties:properties options:nil];
 }
@@ -324,7 +328,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
 
 + (NSString *)version
 {
-    return @"1.1.1";
+    return @"1.1.2";
 }
 
 #pragma mark - Private
