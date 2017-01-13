@@ -95,7 +95,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
     if (self = [self init]) {
         self.configuration = configuration;
         self.enabled = YES;
-        self.serialQueue = seg_dispatch_queue_create_specific("com.sweetpricing.dynamicpricing", DISPATCH_QUEUE_SERIAL);
+        self.serialQueue = swp_dispatch_queue_create_specific("com.sweetpricing.dynamicpricing", DISPATCH_QUEUE_SERIAL);
         self.messageQueue = [[NSMutableArray alloc] init];
         self.factories = [configuration.factories copy];
         self.integrations = [NSMutableDictionary dictionaryWithCapacity:self.factories.count];
@@ -123,18 +123,58 @@ static SWPDynamicPricing *__sharedInstance = nil;
                                   UIApplicationDidBecomeActiveNotification ]) {
             [nc addObserver:self selector:@selector(handleAppStateNotification:) name:name object:nil];
         }
+
+        [self trackApplicationLifecycleEvents:configuration.trackApplicationLifecycleEvents];
     }
     return self;
 }
 
 
-- (void) dealloc
+- (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
 #pragma mark - NSNotificationCenter Callback
+NSString *const SWPVersionKey = @"SWPVersionKey";
+NSString *const SWPBuildKey = @"SWPBuildKey";
+
+- (void)trackApplicationLifecycleEvents:(BOOL)trackApplicationLifecycleEvents
+{
+    if (!trackApplicationLifecycleEvents) {
+        return;
+    }
+
+    NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:SWPVersionKey];
+    NSInteger previousBuild = [[NSUserDefaults standardUserDefaults] integerForKey:SWPBuildKey];
+
+    NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+    NSInteger currentBuild = [[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] integerValue];
+
+    if (!previousBuild) {
+        [self track:@"Application Installed" properties:@{
+            @"version" : currentVersion,
+            @"build" : @(currentBuild)
+        }];
+    } else if (currentBuild != previousBuild) {
+        [self track:@"Application Updated" properties:@{
+            @"previous_version" : previousVersion,
+            @"previous_build" : @(previousBuild),
+            @"version" : currentVersion,
+            @"build" : @(currentBuild)
+        }];
+    }
+
+
+    [self track:@"Application Started" properties:@{
+        @"version" : currentVersion,
+        @"build" : @(currentBuild)
+    }];
+
+    [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:SWPVersionKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:currentBuild forKey:SWPBuildKey];
+}
 
 - (void)handleAppStateNotification:(NSNotification *)note
 {
@@ -143,19 +183,19 @@ static SWPDynamicPricing *__sharedInstance = nil;
     static dispatch_once_t selectorMappingOnce;
     dispatch_once(&selectorMappingOnce, ^{
         selectorMapping = @{
-                            UIApplicationDidFinishLaunchingNotification :
-                                NSStringFromSelector(@selector(applicationDidFinishLaunching:)),
-                            UIApplicationDidEnterBackgroundNotification :
-                                NSStringFromSelector(@selector(applicationDidEnterBackground)),
-                            UIApplicationWillEnterForegroundNotification :
-                                NSStringFromSelector(@selector(applicationWillEnterForeground)),
-                            UIApplicationWillTerminateNotification :
-                                NSStringFromSelector(@selector(applicationWillTerminate)),
-                            UIApplicationWillResignActiveNotification :
-                                NSStringFromSelector(@selector(applicationWillResignActive)),
-                            UIApplicationDidBecomeActiveNotification :
-                                NSStringFromSelector(@selector(applicationDidBecomeActive))
-                            };
+            UIApplicationDidFinishLaunchingNotification :
+                NSStringFromSelector(@selector(applicationDidFinishLaunching:)),
+            UIApplicationDidEnterBackgroundNotification :
+                NSStringFromSelector(@selector(applicationDidEnterBackground)),
+            UIApplicationWillEnterForegroundNotification :
+                NSStringFromSelector(@selector(applicationWillEnterForeground)),
+            UIApplicationWillTerminateNotification :
+                NSStringFromSelector(@selector(applicationWillTerminate)),
+            UIApplicationWillResignActiveNotification :
+                NSStringFromSelector(@selector(applicationWillResignActive)),
+            UIApplicationDidBecomeActiveNotification :
+                NSStringFromSelector(@selector(applicationDidBecomeActive))
+        };
     });
     SEL selector = NSSelectorFromString(selectorMapping[note.name]);
     if (selector) {
@@ -328,7 +368,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
 
 + (NSString *)version
 {
-    return @"1.1.2";
+    return @"1.2.0";
 }
 
 #pragma mark - Private
@@ -420,7 +460,7 @@ static SWPDynamicPricing *__sharedInstance = nil;
         return;
     }
 
-    seg_dispatch_specific_async(_serialQueue, ^{
+    swp_dispatch_specific_async(_serialQueue, ^{
         [self flushMessageQueue];
         [self forwardSelector:selector arguments:arguments options:options];
     });

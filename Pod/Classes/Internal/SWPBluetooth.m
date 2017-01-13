@@ -45,5 +45,4 @@ const NSString *SWPCentralManagerClass = @"CBCentralManager";
 }
 
 - (void)centralManagerDidUpdateState:(id)central {}
-
 @end

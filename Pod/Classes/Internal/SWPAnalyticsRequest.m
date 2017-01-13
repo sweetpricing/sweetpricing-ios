@@ -7,7 +7,8 @@
 #import "SWPAnalyticsRequest.h"
 
 
-@interface SWPAnalyticsRequest () <NSURLConnectionDataDelegate> {
+@interface SWPAnalyticsRequest () <NSURLConnectionDataDelegate>
+{
     NSMutableData *_responseData;
 }
 

@@ -15,7 +15,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [SWPDynamicPricing setupWithConfiguration:[SWPDynamicPricingConfiguration configurationWithAppKey:@"98b30d00aae1d61245698547b81d5692"]];
+    SWPDynamicPricingConfiguration *configuration = [SWPDynamicPricingConfiguration configurationWithAppKey:@"98b30d00aae1d61245698547b81d5692"];
+    configuration.trackApplicationLifecycleEvents = YES;
+    [SWPDynamicPricing setupWithConfiguration:configuration];
     [SWPDynamicPricing debug:YES];
 
     // Suppose we have an in-app store called 'Subscriptions' that has a

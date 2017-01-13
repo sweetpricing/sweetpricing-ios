@@ -40,7 +40,7 @@ NSString *iso8601FormattedString(NSDate *date)
 
 // Async Utils
 dispatch_queue_t
-seg_dispatch_queue_create_specific(const char *label,
+swp_dispatch_queue_create_specific(const char *label,
                                    dispatch_queue_attr_t attr)
 {
     dispatch_queue_t queue = dispatch_queue_create(label, attr);
@@ -49,12 +49,12 @@ seg_dispatch_queue_create_specific(const char *label,
     return queue;
 }
 
-BOOL seg_dispatch_is_on_specific_queue(dispatch_queue_t queue)
+BOOL swp_dispatch_is_on_specific_queue(dispatch_queue_t queue)
 {
     return dispatch_get_specific((__bridge const void *)queue) != NULL;
 }
 
-void seg_dispatch_specific(dispatch_queue_t queue, dispatch_block_t block,
+void swp_dispatch_specific(dispatch_queue_t queue, dispatch_block_t block,
                            BOOL waitForCompletion)
 {
     if (dispatch_get_specific((__bridge const void *)queue)) {
@@ -66,16 +66,16 @@ void seg_dispatch_specific(dispatch_queue_t queue, dispatch_block_t block,
     }
 }
 
-void seg_dispatch_specific_async(dispatch_queue_t queue,
+void swp_dispatch_specific_async(dispatch_queue_t queue,
                                  dispatch_block_t block)
 {
-    seg_dispatch_specific(queue, block, NO);
+    swp_dispatch_specific(queue, block, NO);
 }
 
-void seg_dispatch_specific_sync(dispatch_queue_t queue,
+void swp_dispatch_specific_sync(dispatch_queue_t queue,
                                 dispatch_block_t block)
 {
-    seg_dispatch_specific(queue, block, YES);
+    swp_dispatch_specific(queue, block, YES);
 }
 
 // Logging

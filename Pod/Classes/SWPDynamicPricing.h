@@ -40,6 +40,12 @@
 
 
 /**
+ * Whether the analytics client should automatically make a track call for application lifecycle events, such as "Application Installed", "Application Updated" and "Application Opened".
+ */
+@property (nonatomic, assign) BOOL trackApplicationLifecycleEvents;
+
+
+/**
  * Register a factory that can be used to create an integration.
  */
 - (void)use:(id<SWPIntegrationFactory>)factory;

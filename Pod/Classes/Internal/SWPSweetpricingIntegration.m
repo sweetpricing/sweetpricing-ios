@@ -93,7 +93,7 @@ static BOOL GetAdTrackingEnabled()
         [self.reachability startNotifier];
         self.context = [self staticContext];
         self.flushTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(flush) userInfo:nil repeats:YES];
-        self.serialQueue = seg_dispatch_queue_create_specific("com.sweetpricing.dynamicpricing.sweetpricing", DISPATCH_QUEUE_SERIAL);
+        self.serialQueue = swp_dispatch_queue_create_specific("com.sweetpricing.dynamicpricing.sweetpricing", DISPATCH_QUEUE_SERIAL);
         self.flushTaskID = UIBackgroundTaskInvalid;
         self.analytics = analytics;
     }
@@ -221,12 +221,12 @@ static BOOL GetAdTrackingEnabled()
 
 - (void)dispatchBackground:(void (^)(void))block
 {
-    seg_dispatch_specific_async(_serialQueue, block);
+    swp_dispatch_specific_async(_serialQueue, block);
 }
 
 - (void)dispatchBackgroundAndWait:(void (^)(void))block
 {
-    seg_dispatch_specific_sync(_serialQueue, block);
+    swp_dispatch_specific_sync(_serialQueue, block);
 }
 
 - (void)beginBackgroundTask
